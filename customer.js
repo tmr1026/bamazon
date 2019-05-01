@@ -1,8 +1,6 @@
- // Required node modules.
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
-// Connects to the database.
 var connection = mysql.createConnection({
   host: "localhost",
   port: 8889,
@@ -11,7 +9,7 @@ var connection = mysql.createConnection({
   database: "bamazon"
 });
 
-connection.connect(function (err) {
+connection.connect(function(err){
     if (err) throw err;
     console.log("Connection Successful");
     displayProducts();
@@ -60,7 +58,7 @@ var purchaseRequest = function(res) {
                     if((res[id].StockQuantity-answer.amt)>0){
                         connection.query("UPDATE products SET StockQuantity=' "+res[id].StockQuantity-answer.amt)+" 'WHERE Product=' "+Product+ " ' ", function(err, res2){
                             console.log("Purchase Complete!");
-                            makeTable();
+                            displayProducts();
                         }
                     }else{
                         console.log("Not a valid Selection!")
