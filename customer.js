@@ -4,7 +4,7 @@ var inquirer = require("inquirer");
 var connection = mysql.createConnection({
   host: "localhost",
   port: 8889,
-  user: "root",
+  user: "",
   password: "",
   database: "bamazon"
 });
@@ -19,10 +19,10 @@ var displayProducts = function() {
 	connection.query("Select * FROM products", function(err, res) {
 		if (err) throw err;
 		for (var i = 0; i < res.length; i++) {
-			console.log("Product ID: " + res[i].ItemId + " || Product Name: " +
-						res[i].Product + "Department: " + res[i].Department + " || Price: " + res[i].Price) + "Qty in Stock: " + res[i].StockQuantity;
+			console.log("Product ID:" + res[i].ItemId + " || Product Name: " +
+						res[i].Product + " || Department: " + res[i].Department + " || Price: " + res[i].Price) + "Qty in Stock: " + res[i].StockQuantity;
 		}
-  		purchaseRequest();
+  		purchaseRequest(res);
 	});
 };
 
@@ -40,7 +40,7 @@ var purchaseRequest = function(res) {
         }
         for(var i=0; i <res.length;i++){
             if (res[i].Product==answer.choice){
-                correct=tue;
+                correct=true;
                 var product=answer.choice;
                 var id=i;
                 inquirer.prompt({
@@ -48,7 +48,7 @@ var purchaseRequest = function(res) {
                     type: "input",
                     message:"How many would you like to buy?",
                     validate: function(value) {
-                        if (isNaN(value) === false){
+                        if(isNaN(value) == false){
                             return true;
                         }else{
                             return false; 
@@ -69,7 +69,7 @@ var purchaseRequest = function(res) {
         }
         if(i==res.length && correct==false){
             console.log("Not a valid Selection!");
-            purchaseRequest();
+            purchaseRequest(res);
         }    
     })		
 }
